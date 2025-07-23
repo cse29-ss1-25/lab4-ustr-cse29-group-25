@@ -38,63 +38,33 @@ Returns an empty string on invalid range.
 */
 UStr substring(UStr s, int32_t start, int32_t end) {
 	// TODO: implement this
-    int32_t start_byte = 0;
-    int32_t end_byte = 0;
-    int32_t result_bytes = 0;
-    char* result_contents = NULL;
-    
-    // Validate input parameters first
-    if (start < 0 || end < start || s.contents == NULL || s.codepoints == 0) {
-    	return new_ustr("");
-    }    
-    // Handle empty string case
-    if (s.codepoints == 0 || s.bytes == 0) {
+    if (!s.contents || start < 0 || end < start || start >= s.codepoints || end > s.codepoints) {
         return new_ustr("");
     }
-    
-    // Clamp end to string length
-    if (end > s.codepoints) {
-        end = s.codepoints;
-    }
-    
-    // Handle case where start equals end (empty substring)
     if (start == end) {
         return new_ustr("");
     }
-    
-    // Find byte positions for start and end character indices
-    // Only call bi_of_cpi with validated parameters
-    start_byte = bi_of_cpi(s.contents, start);
-    end_byte = bi_of_cpi(s.contents, end);
-    
-    // Validate that bi_of_cpi returned valid positions
-    if (start_byte < 0 || end_byte < start_byte || end_byte > s.bytes) {
+
+    // Convert codepoint index to byte index using lab helpers
+    int32_t start_byte = bi_of_cpi(s.contents, start);
+    int32_t end_byte = bi_of_cpi(s.contents, end);
+
+    // Additional safety: invalid offsets or badly behaving helpers
+    if (start_byte < 0 || end_byte < 0 || end_byte < start_byte || end_byte > s.bytes) {
         return new_ustr("");
     }
-    
-    // Calculate result size
-    result_bytes = end_byte - start_byte;
-    
-    // Handle zero-length result
-    if (result_bytes <= 0) {
-        return new_ustr("");
+
+    int32_t sublen = end_byte - start_byte;
+    char *sub = malloc(sublen + 1);          // +1 for the NUL terminator
+    if (!sub) {
+        return new_ustr(""); // allocation failed
     }
-    
-    // Allocate memory for result
-    result_contents = malloc(result_bytes + 1);
-    if (result_contents == NULL) {
-        return new_ustr("");  // Handle allocation failure
-    }
-    
-    // Extract substring bytes
-    strncpy(result_contents, s.contents + start_byte, result_bytes);
-    result_contents[result_bytes] = '\0';  // Ensure null termination
-    
-    // Create new UStr and clean up
-    UStr result = new_ustr(result_contents);
-    free(result_contents);
-    
-    return result;
+    memcpy(sub, s.contents + start_byte, sublen);
+    sub[sublen] = '\0';
+
+    UStr res = new_ustr(sub); // new_ustr copies and calculates codepoints/bytes
+    free(sub);
+    return res;
 }
 
 /*
