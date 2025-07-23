@@ -37,35 +37,7 @@ and ending at index end (exclusive).
 Returns an empty string on invalid range.
 */
 UStr substring(UStr s, int32_t start, int32_t end) {
-<<<<<<< HEAD
 	// TODO: implement this
-	if(start >= s.length) {
-		String match = new_ustr(s.contents);
-		free(s.contents);
-		return match;
-	}
-	else if(start < 0) {
-		String match = new_ustr(s.contents);
-		free(s.contents);
-		return match;
-	}
-	else {
-		char* allocate = malloc(end + 1);
-		
-		for(int index = 0; index < end; index++) {
-			allocate[index] = s.contents[start + index];
-		}
-
-	        allocate[end] = '\0';
-
-	        free(s.contents);
-
-	        String substring = { end , allocate };
-
-	        return substring;
-	}
-	
-=======
     // Validate input parameters
     if (start < 0 || end < start || start >= s.codepoints) {
         return new_ustr("");  // Return empty string for invalid range
@@ -91,7 +63,6 @@ UStr substring(UStr s, int32_t start, int32_t end) {
     free(result_contents);
     
     return result;
->>>>>>> b399c677900c39190cc3d61a0c6b022592471ba4
 }
 
 /*
@@ -99,24 +70,7 @@ Given 2 strings s1 and s2, returns a string that is the result of
 concatenating s1 and s2. 
 */
 UStr concat(UStr s1, UStr s2) {
-<<<<<<< HEAD
 	// TODO: implement this
-	int s1_totalLength = strlen(s1.contents);
-	int s2_totalLength = strlen(s2.contents);
-
-	char* allocate = malloc((s1_totalLength + s2_totalLength) + 1);
-	
-	strcpy(allocate, s1.contents);
-
-	strcat(allocate, s2.contents);
-
-	UStr total_String = { s1_totalLength + s2_totalLength, (uintptr_t) allocate };
-
-	free(s1.contents);
-	free(s2.contents);
-
-	return total_String;
-=======
     // Calculate total size needed
     int32_t total_bytes = s1.bytes + s2.bytes;
     
@@ -136,7 +90,6 @@ UStr concat(UStr s1, UStr s2) {
     free(new_contents);
     
     return result;
->>>>>>> b399c677900c39190cc3d61a0c6b022592471ba4
 }
 
 /*
