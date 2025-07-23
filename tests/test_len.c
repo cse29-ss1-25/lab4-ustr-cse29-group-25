@@ -13,5 +13,7 @@ int main() {
 
         UStr s = new_ustr(input);
         printf("len(%s) = %d\n", s.contents, len(s));
+        // We have to free memory due to leak
+        free_ustr(s); 
     }
 }
