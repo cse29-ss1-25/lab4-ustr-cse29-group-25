@@ -38,7 +38,7 @@ Returns an empty string on invalid range.
 */
 UStr substring(UStr s, int32_t start, int32_t end) {
 	// TODO: implement this
-
+	
 }
 
 /*
@@ -47,7 +47,21 @@ concatenating s1 and s2.
 */
 UStr concat(UStr s1, UStr s2) {
 	// TODO: implement this
+	int s1_totalLength = strlen(s1.contents);
+	int s2_totalLength = strlen(s2.contents);
 
+	char* allocate = malloc((s1_totalLength + s2_totalLength) + 1);
+	
+	strcpy(allocate, s1.contents);
+
+	strcat(allocate, s2.contents);
+
+	UStr total_String = { s1_totalLength + s2_totalLength, (uintptr_t) allocate };
+
+	free(s1.contents);
+	free(s2.contents);
+
+	return total_String;
 }
 
 /*
