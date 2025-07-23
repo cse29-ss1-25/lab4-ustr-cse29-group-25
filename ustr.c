@@ -11,13 +11,13 @@ Initializes a new UStr with contents
 UStr new_ustr(char* contents) {
 	int32_t bytes = strlen(contents);
 	int32_t codepoints = utf8_strlen(contents);
-	uint8_t all_ascii = bytes == codepoints;
+	uint8_t is_ascii = bytes == codepoints;
 	char* contents_copy = malloc(bytes + 1);
 	strcpy(contents_copy, contents);
 	UStr s = {
 		codepoints,
 		bytes,
-		all_ascii,
+		is_ascii,
 		contents_copy
 	};
 	return s;
