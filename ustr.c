@@ -39,6 +39,31 @@ Returns an empty string on invalid range.
 UStr substring(UStr s, int32_t start, int32_t end) {
 <<<<<<< HEAD
 	// TODO: implement this
+	if(start >= s.length) {
+		String match = new_ustr(s.contents);
+		free(s.contents);
+		return match;
+	}
+	else if(start < 0) {
+		String match = new_ustr(s.contents);
+		free(s.contents);
+		return match;
+	}
+	else {
+		char* allocate = malloc(end + 1);
+		
+		for(int index = 0; index < end; index++) {
+			allocate[index] = s.contents[start + index];
+		}
+
+	        allocate[end] = '\0';
+
+	        free(s.contents);
+
+	        String substring = { end , allocate };
+
+	        return substring;
+	}
 	
 =======
     // Validate input parameters
